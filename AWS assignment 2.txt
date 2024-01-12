@@ -1,0 +1,329 @@
+(USE AWS CLI)
+Create 6 IAM Users:
+1. Alice  2. Bob  3. Charles
+4. David 5. Edward 6. Fred
+
+root@DESKTOP-PDOJQQA:~# aws configure
+AWS Access Key ID [****************B6OL]: AKIA47BNTZLI4TM74M5Y
+AWS Secret Access Key [****************mJOK]: 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
+Default region name [us-east-2]:
+Default output format [json]:
+root@DESKTOP-PDOJQQA:~# aws iam create-user --user-name Alice
+{
+    "User": {
+        "Path": "/",
+        "UserName": "Alice",
+        "UserId": "AIDA47BNTZLIXL6RALKV7",
+        "Arn": "arn:aws:iam::891301382865:user/Alice",
+        "CreateDate": "2024-01-12T08:38:34Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-user --user-name Bob
+{
+    "User": {
+        "Path": "/",
+        "UserName": "Bob",
+        "UserId": "AIDA47BNTZLITR4JLPK4M",
+        "Arn": "arn:aws:iam::891301382865:user/Bob",
+        "CreateDate": "2024-01-12T08:38:45Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-user --user-name Charles
+{
+    "User": {
+        "Path": "/",
+        "UserName": "Charles",
+        "UserId": "AIDA47BNTZLI46K7DRQNU",
+        "Arn": "arn:aws:iam::891301382865:user/Charles",
+        "CreateDate": "2024-01-12T08:39:01Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-user --user-name David
+{
+    "User": {
+        "Path": "/",
+        "UserName": "David",
+        "UserId": "AIDA47BNTZLIVJMIR5ER4",
+        "Arn": "arn:aws:iam::891301382865:user/David",
+        "CreateDate": "2024-01-12T08:39:15Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-user --user-name Edward
+{
+    "User": {
+        "Path": "/",
+        "UserName": "Edward",
+        "UserId": "AIDA47BNTZLI43GK4GADF",
+        "Arn": "arn:aws:iam::891301382865:user/Edward",
+        "CreateDate": "2024-01-12T08:39:30Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-user --user-name Fred
+{
+    "User": {
+        "Path": "/",
+        "UserName": "Fred",
+        "UserId": "AIDA47BNTZLI5FGAMWJHA",
+        "Arn": "arn:aws:iam::891301382865:user/Fred",
+        "CreateDate": "2024-01-12T08:39:42Z"
+    }
+}
+
+---------------------------------------------------------------------------------
+
+Create 3 groups:
+1. Developers 2. Operations 3. Audit-Team
+
+root@DESKTOP-PDOJQQA:~# aws iam create-group --group-name Developers
+{
+    "Group": {
+        "Path": "/",
+        "GroupName": "Developers",
+        "GroupId": "AGPA47BNTZLI4AY6A6G2E",
+        "Arn": "arn:aws:iam::891301382865:group/Developers",
+        "CreateDate": "2024-01-12T08:41:42Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-group --group-name Operations
+{
+    "Group": {
+        "Path": "/",
+        "GroupName": "Operations",
+        "GroupId": "AGPA47BNTZLI66AL5AKKZ",
+        "Arn": "arn:aws:iam::891301382865:group/Operations",
+        "CreateDate": "2024-01-12T08:41:55Z"
+    }
+}
+root@DESKTOP-PDOJQQA:~# aws iam create-group --group-name Audit-Team
+{
+    "Group": {
+        "Path": "/",
+        "GroupName": "Audit-Team",
+        "GroupId": "AGPA47BNTZLITJHQVC34Y",
+        "Arn": "arn:aws:iam::891301382865:group/Audit-Team",
+        "CreateDate": "2024-01-12T08:42:13Z"
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+Assign the "IAMReadOnlyAccess" policy to the Developers group.
+
+root@DESKTOP-PDOJQQA:~# aws iam attach-group-policy --group-name Developers --policy-arn arn:aws:iam::aws:policy/IAMReadOnlyAccess
+root@DESKTOP-PDOJQQA:~# aws iam list-attached-group-policies --group-name Developers
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "IAMReadOnlyAccess",
+            "PolicyArn": "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+        }
+    ]
+}
+
+--------------------------------------------------------------------------------------
+
+Assign the "IAMReadOnlyAccess" policy to the Operations group.
+
+root@DESKTOP-PDOJQQA:~# aws iam attach-group-policy --group-name Operations --policy-arn arn:aws:iam::aws:policy/IAMReadOnlyAccess
+root@DESKTOP-PDOJQQA:~# aws iam list-attached-group-policies --group-name Operations
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "IAMReadOnlyAccess",
+            "PolicyArn": "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+        }
+    ]
+}
+
+-----------------------------------------------------------------------------------------
+
+Assign the "IAMFullAccess" policy to the Audit-Team group.
+
+root@DESKTOP-PDOJQQA:~# aws iam attach-group-policy --group-name Audit-Team --policy-arn arn:aws:iam::aws:policy/IAMFullAccess
+root@DESKTOP-PDOJQQA:~# aws iam list-attached-group-policies --group-name Audit-Team
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "IAMFullAccess",
+            "PolicyArn": "arn:aws:iam::aws:policy/IAMFullAccess"
+        }
+    ]
+}
+
+---------------------------------------------------------------------------------------
+
+Add Alice, Bob, and Charles to the Developers group.
+
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name  Developers --user-name Alice
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name Alice
+{
+    "Groups": [
+        {
+            "Path": "/",
+            "GroupName": "Developers",
+            "GroupId": "AGPA47BNTZLI4AY6A6G2E",
+            "Arn": "arn:aws:iam::891301382865:group/Developers",
+            "CreateDate": "2024-01-12T08:41:42Z"
+        }
+    ]
+}
+
+
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name  Developers --user-name Bob
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name Bob
+{
+    "Groups": [
+        {
+            "Path": "/",
+            "GroupName": "Developers",
+            "GroupId": "AGPA47BNTZLI4AY6A6G2E",
+            "Arn": "arn:aws:iam::891301382865:group/Developers",
+            "CreateDate": "2024-01-12T08:41:42Z"
+        }
+    ]
+}
+
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name  Developers --user-name Charles
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name Charles
+{
+    "Groups": [
+        {
+            "Path": "/",
+            "GroupName": "Developers",
+            "GroupId": "AGPA47BNTZLI4AY6A6G2E",
+            "Arn": "arn:aws:iam::891301382865:group/Developers",
+            "CreateDate": "2024-01-12T08:41:42Z"
+        }
+    ]
+}
+
+
+--------------------------------------------------------------------------------------
+
+Add David and Edward to the Operations group.
+
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name  Operations --user-name David
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name David
+{
+    "Groups": [
+        {
+            "Path": "/",
+            "GroupName": "Operations",
+            "GroupId": "AGPA47BNTZLI66AL5AKKZ",
+            "Arn": "arn:aws:iam::891301382865:group/Operations",
+            "CreateDate": "2024-01-12T08:41:55Z"
+        }
+    ]
+}
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name  Operations --user-name Edward
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name Edward
+{
+    "Groups": [
+        {
+            "Path": "/",
+            "GroupName": "Operations",
+            "GroupId": "AGPA47BNTZLI66AL5AKKZ",
+            "Arn": "arn:aws:iam::891301382865:group/Operations",
+            "CreateDate": "2024-01-12T08:41:55Z"
+        }
+    ]
+}
+
+--------------------------------------------------------------------------------------
+
+Add Charles and David to the Audit-Team group.
+
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name Audit-Team --user-name Charles
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name Charles
+{
+    "Groups": [
+	        {
+            "Path": "/",
+            "GroupName": "Audit-Team",
+            "GroupId": "AGPA47BNTZLITJHQVC34Y",
+            "Arn": "arn:aws:iam::891301382865:group/Audit-Team",
+            "CreateDate": "2024-01-12T08:42:13Z"
+        }
+    ]
+	
+root@DESKTOP-PDOJQQA:~# aws iam add-user-to-group --group-name  Audit-Team --user-name David
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name David
+    "Groups": [
+        {
+            "Path": "/",
+            "GroupName": "Audit-Team",
+            "GroupId": "AGPA47BNTZLITJHQVC34Y",
+            "Arn": "arn:aws:iam::891301382865:group/Audit-Team",
+            "CreateDate": "2024-01-12T08:42:13Z"
+        }
+    ]
+}
+
+-------------------------------------------------------------------------------------
+
+Assign an inline policy to Fred.
+
+root@DESKTOP-PDOJQQA:~# aws put iam put-user-policy --user-name-Fred --policy-name MyInlinePolicy --policy-document file://root/mypolicy.json
+
+root@DESKTOP-PDOJQQA:~# aws iam list-groups-for-user --user-name Fred
+{
+    "Groups": []
+}
+
+-------------------------------------------------------------------------------------
+
+Log into the AWS account as an IAM user,and list IAM user actions in terminal.
+
+
+root@DESKTOP-PDOJQQA:~# aws configure
+AWS Access Key ID [****************B6OL]: AKIA47BNTZLI4TM74M5Y
+AWS Secret Access Key [****************mJOK]: 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
+Default region name [us-east-2]:
+Default output format [json]:
+
+root@DESKTOP-PDOJQQA:~# aws iam list-users
+{
+    "Users": [
+        {
+            "Path": "/",
+            "UserName": "Alice",
+            "UserId": "AIDA47BNTZLIXL6RALKV7",
+            "Arn": "arn:aws:iam::891301382865:user/Alice",
+            "CreateDate": "2024-01-12T08:38:34Z"
+        },
+        {
+            "Path": "/",
+            "UserName": "Bob",
+            "UserId": "AIDA47BNTZLITR4JLPK4M",
+            "Arn": "arn:aws:iam::891301382865:user/Bob",
+            "CreateDate": "2024-01-12T08:38:45Z"
+        },
+        {
+            "Path": "/",
+            "UserName": "Charles",
+            "UserId": "AIDA47BNTZLI46K7DRQNU",
+            "Arn": "arn:aws:iam::891301382865:user/Charles",
+            "CreateDate": "2024-01-12T08:39:01Z"
+        },
+        {
+            "Path": "/",
+            "UserName": "David",
+            "UserId": "AIDA47BNTZLIVJMIR5ER4",
+            "Arn": "arn:aws:iam::891301382865:user/David",
+            "CreateDate": "2024-01-12T08:39:15Z"
+        },
+        {
+            "Path": "/",
+            "UserName": "Edward",
+            "UserId": "AIDA47BNTZLI43GK4GADF",
+            "Arn": "arn:aws:iam::891301382865:user/Edward",
+            "CreateDate": "2024-01-12T08:39:30Z"
+        },
+        {
+            "Path": "/",
+            "UserName": "Fred",
+            "UserId": "AIDA47BNTZLI5FGAMWJHA",
+            "Arn": "arn:aws:iam::891301382865:user/Fred",
+            "CreateDate": "2024-01-12T08:39:42Z"
+        }
+    ]	
